@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/boards")
-public class BoardController {
+public class BoardApiController {
 
     private final BoardService boardService;
 
