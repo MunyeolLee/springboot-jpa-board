@@ -11,14 +11,16 @@ import java.util.List;
 @Builder
 public class ErrorResponse {
 
-    private int status;
-    private List<String> errorMessage;
-    private LocalDateTime timeStamp;
+    private final int status;
+    private final String code;
+    private final String message;
+    private final LocalDateTime timeStamp;
 
-    public static ErrorResponse of(HttpStatus status, List<String> errorMessage) {
+    public static ErrorResponse of(ErrorCode errorCode) {
         return ErrorResponse.builder()
-                .status(status.value())
-                .errorMessage(errorMessage)
+                .status(errorCode.getStatus())
+                .code(errorCode.name())
+                .message(errorCode.getMessage())
                 .timeStamp(LocalDateTime.now())
                 .build();
     }

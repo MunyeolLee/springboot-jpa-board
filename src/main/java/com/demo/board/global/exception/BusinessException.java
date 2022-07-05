@@ -1,20 +1,12 @@
 package com.demo.board.global.exception;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class BusinessException extends RuntimeException {
 
-    private int status;
-
-    public BusinessException(int status, String message) {
-        super(message);
-        this.status = status;
-    }
-
-    public BusinessException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.status = errorCode.getStatus();
-    }
+    private ErrorCode errorCode;
 
 }
