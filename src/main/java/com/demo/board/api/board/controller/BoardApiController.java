@@ -27,9 +27,9 @@ public class BoardApiController {
     /*
      * 게시글 수정 요청
      */
-    @PostMapping("/{id}")
-    public Long update(@PathVariable Long id, @RequestBody BoardRequestDto params) {
-        return boardService.update(id, params);
+    @PatchMapping("/{id}")
+    public Long updateById(@PathVariable Long id, @RequestBody BoardRequestDto params) {
+        return boardService.updateById(id, params);
     }
 
     /*
@@ -46,5 +46,13 @@ public class BoardApiController {
     @GetMapping("/{id}")
     public BoardResponseDto findById(@PathVariable Long id) {
         return boardService.findById(id);
+    }
+
+    /*
+     * 게시글 삭제 요청
+     */
+    @DeleteMapping("/{id}")
+    public Long deleteById(@PathVariable Long id) {
+        return boardService.deleteById(id);
     }
 }
