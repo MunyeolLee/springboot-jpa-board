@@ -33,7 +33,7 @@ public class BoardService {
      * 게시글 수정
      */
     @Transactional
-    public Long update(Long id, BoardRequestDto params) {
+    public Long updateById(Long id, BoardRequestDto params) {
         Board board = boardRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
         board.update(params.getTitle(), params.getContent());
         return id;
@@ -54,5 +54,14 @@ public class BoardService {
     public BoardResponseDto findById(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
         return new BoardResponseDto(board);
+    }
+
+    /*
+     * 게시글 삭제
+     */
+    @Transactional
+    public Long deleteById(Long id) {
+        boardRepository.deleteById(id);
+        return id;
     }
 }
