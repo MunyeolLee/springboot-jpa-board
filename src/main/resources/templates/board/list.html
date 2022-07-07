@@ -11,7 +11,6 @@
                 <option value="">전체</option>
                 <option value="title">제목</option>
                 <option value="content">내용</option>
-                <option value="writer">작성자</option>
             </select>
             <input type="text" id="keyword" class="form-control" placeholder="키워드를 입력해 주세요." style="width: 300px;" />
         </form>
@@ -27,7 +26,6 @@
                 <tr>
                     <th>번호</th>
                     <th>제목</th>
-                    <th>작성자</th>
                     <th>등록일</th>
                     <th>조회 수</th>
                 </tr>
@@ -57,6 +55,7 @@
         window.onload = () => {
             findAll();
         }
+
         /**
          * 게시글 리스트 조회
          */
@@ -79,9 +78,8 @@
                                 <td class="text-left">
                                     <a href="javascript: void(0);">${obj.title}</a>
                                 </td>
-                                <td>${obj.writer}</td>
                                 <td>${moment(obj.createdDate).format('YYYY-MM-DD HH:mm:ss')}</td>
-                                <td>${obj.hits}</td>
+                                <td>${obj.views}</td>
                             </tr>
                         `;
                     });
