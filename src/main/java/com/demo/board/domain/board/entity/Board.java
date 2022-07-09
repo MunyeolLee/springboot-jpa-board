@@ -43,4 +43,8 @@ public class Board {
         this.content = content;
         this.modifiedDate = LocalDateTime.now();
     }
+
+    public void increaseViews() {
+        this.views++;
+    }
 }

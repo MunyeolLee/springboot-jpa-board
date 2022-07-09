@@ -51,8 +51,10 @@ public class BoardService {
     /*
      * 게시글 상세 조회
      */
+    @Transactional
     public BoardResponseDto findById(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+        board.increaseViews();
         return new BoardResponseDto(board);
     }
 
