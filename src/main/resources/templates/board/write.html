@@ -30,35 +30,62 @@
 
     <th:block layout:fragment="script">
     <script th:inline="javascript">
+		window.onload = () => {
+			findBoard();
+		}
+
 		/**
-         * 유효성 검사
-         */
-        function isValid() {
+		 * 게시글 조회
+		 */
+		function findBoard() {
+			const id = /*[[ ${id} ]]*/;
 
-          	const form = document.getElementById('form');
+			if ( !id ) {
+				return false;
+			}
 
-        	if (!form.title.value.trim()) {
-        		alert('제목을 입력해 주세요.');
-        		form.title.value = '';
-        		form.title.focus();
-        		return false;
-        	}
+			fetch(`/boards/${id}`).then(response => {
+				if (!response.ok) {
+					throw new Error('Request failed...');
+				}
+				return response.json();
+			}).then(json => {
+				const form = document.getElementById('form');
+				form.title.value = json.title;
+				form.content.value = json.content;
+			}).catch(error => {
+				alert('게시글 정보를 찾을 수 없습니다.');
+				location.href = '/board/list';
+			});
+		}
 
-        	if (!form.content.value.trim()) {
-        		alert('내용을 입력해 주세요.');
-        		form.content.value = '';
-        		form.content.focus();
-        		return false;
-        	}
+		/**
+		 * 유효성 검사
+		 */
+		function isValid() {
+			const form = document.getElementById('form');
 
-        	return true;
-        }
+			if (!form.title.value.trim()) {
+				alert('제목을 입력해 주세요.');
+				form.title.value = '';
+				form.title.focus();
+				return false;
+			}
+
+			if (!form.content.value.trim()) {
+				alert('내용을 입력해 주세요.');
+				form.content.value = '';
+				form.content.focus();
+				return false;
+			}
+
+			return true;
+		}
 
         /**
 		 * 게시글 등록(생성/수정)
 		 */
 		function save() {
-
 			if ( !isValid() ) {
 				return false;
 			}
@@ -70,13 +97,16 @@
 				deleteYn: 'N'
 			};
 
-			fetch('/boards', {
-				method: 'POST',
+			const id = /*[[ ${id} ]]*/;
+			const uri = ( id ) ? `/boards/${id}` : '/boards';
+			const method = ( id ) ? 'PATCH' : 'POST';
+
+			fetch(uri, {
+				method: method,
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify(params)
-
 			}).then(response => {
 				if (!response.ok) {
 					throw new Error('Request failed...');
@@ -84,7 +114,6 @@
 
 				alert('저장되었습니다.');
 				location.href = '/board/list';
-
 			}).catch(error => {
 				alert('오류가 발생하였습니다.');
 			});
