@@ -1,5 +1,6 @@
 package com.demo.board.domain.board.service;
 
+import com.demo.board.api.board.dto.BoardCommonParams;
 import com.demo.board.api.board.dto.BoardRequestDto;
 import com.demo.board.api.board.dto.BoardResponseDto;
 import com.demo.board.domain.board.entity.Board;
@@ -42,9 +43,24 @@ public class BoardService {
     /*
      * 전체 게시글 목록 조회
      */
-    public List<BoardResponseDto> findAll() {
+    public List<BoardResponseDto> findAll(BoardCommonParams params) {
+        List<Board> boardList;
+
+        String searchType = params.getSearchType();
+        String keyword = params.getKeyword() == null ? "" : params.getKeyword();
+
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
-        List<Board> boardList = boardRepository.findAll(sort);
+
+        if( "title".equals(searchType) ) {
+            boardList = boardRepository.findByTitleContaining(keyword, sort);
+        }
+        else if( "content".equals(searchType) ) {
+            boardList = boardRepository.findByContentContaining(keyword, sort);
+        }
+        else {
+            boardList = boardRepository.findByTitleContainingOrContentContaining(keyword, keyword, sort);
+        }
+
         return boardList.stream().map(BoardResponseDto::new).collect(Collectors.toList());
     }
 

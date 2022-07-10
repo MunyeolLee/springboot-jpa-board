@@ -1,5 +1,6 @@
 package com.demo.board.api.board.controller;
 
+import com.demo.board.api.board.dto.BoardCommonParams;
 import com.demo.board.api.board.dto.BoardRequestDto;
 import com.demo.board.api.board.dto.BoardResponseDto;
 import com.demo.board.domain.board.service.BoardService;
@@ -36,8 +37,8 @@ public class BoardApiController {
      * 게시글 전체 목록 조회 요청
      */
     @GetMapping
-    public List<BoardResponseDto> findAll() {
-        return boardService.findAll();
+    public List<BoardResponseDto> findAll(BoardCommonParams params) {
+        return boardService.findAll(params);
     }
 
     /*
