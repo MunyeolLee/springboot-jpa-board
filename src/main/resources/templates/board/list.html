@@ -53,7 +53,19 @@
     <th:block layout:fragment="script">
     <script th:inline="javascript">
         window.onload = () => {
+            addEnterSearchEvent();
             findAll();
+        }
+
+        /**
+         * 키워드 - 엔터 검색 이벤트 바인딩
+         */
+        function addEnterSearchEvent() {
+            document.getElementById('keyword').addEventListener('keyup', (e) => {
+                if (e.keyCode === 13) {
+                    findAll();
+                }
+            });
         }
 
         /**
@@ -61,7 +73,15 @@
          */
         function findAll() {
 
-            fetch('/boards').then(response => {
+            const form = document.getElementById('searchForm');
+            const params = {
+                  searchType: form.searchType.value
+                , keyword: form.keyword.value
+            };
+
+            const uri = "/boards?" + new URLSearchParams(params).toString();
+
+            fetch(uri).then(response => {
                 if (response.ok) {
                     return response.json();
                 }
@@ -76,7 +96,7 @@
                             <tr>
                                 <td>${json.length - idx}</td>
                                 <td class="text-left">
-                                    <a href="javascript: void(0);">${obj.title}</a>
+                                    <a href="javascript: void(0);" onclick="goView(${obj.id})">${obj.title}</a>
                                 </td>
                                 <td>${moment(obj.createdDate).format('YYYY-MM-DD HH:mm:ss')}</td>
                                 <td>${obj.views}</td>
@@ -87,6 +107,13 @@
 
                 document.getElementById('list').innerHTML = html;
             });
+        }
+
+        /**
+         * 게시글 조회
+         */
+        function goView(id) {
+            location.href = `/board/view/${id}`;
         }
     </script>
     </th:block>
