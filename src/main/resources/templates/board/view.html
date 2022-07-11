@@ -74,14 +74,14 @@
 		 * 수정하기
 		 */
 		function goWrite() {
-			location.href = `/board/write?id=[[ ${id} ]]`;
+			location.href = '/board/write' + location.search + `&id=[[ ${id} ]]`;
 		}
 
 		/**
 		 * 뒤로가기
 		 */
 		function goList() {
-			location.href = '/board/list';
+			location.href = '/board/list' + location.search;
 		}
 
 		/**

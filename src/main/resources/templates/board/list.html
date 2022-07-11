@@ -53,8 +53,11 @@
     <th:block layout:fragment="script">
     <script th:inline="javascript">
         window.onload = () => {
+            setQueryStringParams();
+
+            findAll();
+
             addEnterSearchEvent();
-            findAll(1);
         }
 
         /**
@@ -64,6 +67,24 @@
             document.getElementById('keyword').addEventListener('keyup', (e) => {
                 if (e.keyCode === 13) {
                     findAll(1);
+                }
+            });
+        }
+
+        /**
+         * 쿼리 스트링 파라미터 셋팅
+         */
+        function setQueryStringParams() {
+
+            if ( !location.search ) {
+                return false;
+            }
+
+            const form = document.getElementById('searchForm');
+
+            new URLSearchParams(location.search).forEach((value, key) => {
+                if (form[key]) {
+                    form[key].value = value;
                 }
             });
         }
@@ -92,6 +113,8 @@
          * 게시글 리스트 조회
          */
         function findAll(page) {
+            const pageParam = Number(new URLSearchParams(location.search).get('page'));
+            page = (page) ? page : ((pageParam) ? pageParam : 1);
 
             const form = document.getElementById('searchForm');
             const params = {
@@ -101,6 +124,10 @@
                 , searchType: form.searchType.value
                 , keyword: form.keyword.value
             }
+
+            const queryString = new URLSearchParams(params).toString();
+            const replaceUri = location.pathname + '?' + queryString;
+            history.replaceState({}, '', replaceUri);
 
             getJson('/boards', params).then(response => {
                 if (!Object.keys(response).length) {
@@ -113,14 +140,13 @@
                 let num = response.params.pagination.totalRecordCount - ((response.params.page - 1) * response.params.recordPerPage);
 
                 response.list.forEach((obj, idx) => {
+                    const viewUri = `/board/view/${obj.id}` + '?' + queryString;
                     html += `
                         <tr>
-                            <td>${num--}</td>
-                            <td class="text-left">
-                                <a href="javascript: void(0);" onclick="goView(${obj.id})">${obj.title}</a>
-                            </td>
-                            <td>${moment(obj.createdDate).format('YYYY-MM-DD HH:mm:ss')}</td>
-                            <td>${obj.views}</td>
+                                <td>${num--}</td>
+                                <td class="text-left"><a href="${viewUri}">${obj.title}</a></td>
+                                <td>${moment(obj.createdDate).format('YYYY-MM-DD HH:mm:ss')}</td>
+                                <td>${obj.views}</td>
                         </tr>
                     `;
                 });
@@ -166,12 +192,6 @@
             }
 
             document.querySelector('.pagination').innerHTML = html;
-        }
-        /**
-         * 게시글 조회
-         */
-        function goView(id) {
-            location.href = `/board/view/${id}`;
         }
     </script>
     </th:block>

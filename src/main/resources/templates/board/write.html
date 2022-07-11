@@ -113,10 +113,18 @@
 				}
 
 				alert('저장되었습니다.');
-				location.href = '/board/list';
+				goList();
 			}).catch(error => {
 				alert('오류가 발생하였습니다.');
 			});
+		}
+
+		/**
+		 * 뒤로가기
+		 */
+		function goList() {
+			const id = /*[[ ${id} ]]*/;
+			location.href = (id) ? '/board/list' + location.search : '/board/list';
 		}
     </script>
     </th:block>
