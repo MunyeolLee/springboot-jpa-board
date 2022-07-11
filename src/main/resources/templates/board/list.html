@@ -54,7 +54,7 @@
     <script th:inline="javascript">
         window.onload = () => {
             addEnterSearchEvent();
-            findAll();
+            findAll(1);
         }
 
         /**
@@ -63,52 +63,110 @@
         function addEnterSearchEvent() {
             document.getElementById('keyword').addEventListener('keyup', (e) => {
                 if (e.keyCode === 13) {
-                    findAll();
+                    findAll(1);
                 }
             });
         }
 
         /**
+         * 조회 API 호출
+         */
+        async function getJson(uri, params) {
+
+            if (params) {
+                uri = uri + '?' + new URLSearchParams(params).toString();
+            }
+
+            const response = await fetch(uri);
+
+            if (!response.ok) {
+                await response.json().then(error => {
+                    throw error;
+                });
+            }
+
+            return await response.json();
+        }
+
+        /**
          * 게시글 리스트 조회
          */
-        function findAll() {
+        function findAll(page) {
 
             const form = document.getElementById('searchForm');
             const params = {
-                  searchType: form.searchType.value
+                  page: page
+                , recordPerPage: 10
+                , pageSize: 10
+                , searchType: form.searchType.value
                 , keyword: form.keyword.value
-            };
+            }
 
-            const uri = "/boards?" + new URLSearchParams(params).toString();
-
-            fetch(uri).then(response => {
-                if (response.ok) {
-                    return response.json();
+            getJson('/boards', params).then(response => {
+                if (!Object.keys(response).length) {
+                    document.getElementById('list').innerHTML = '<td colspan="5">등록된 게시글이 없습니다.</td>';
+                    drawPages();
+                    return false;
                 }
-            }).then(json => {
+
                 let html = '';
+                let num = response.params.pagination.totalRecordCount - ((response.params.page - 1) * response.params.recordPerPage);
 
-                if (!json.length) {
-                    html = '<td colspan="5">등록된 게시글이 없습니다.</td>';
-                } else {
-                    json.forEach((obj, idx) => {
-                        html += `
-                            <tr>
-                                <td>${json.length - idx}</td>
-                                <td class="text-left">
-                                    <a href="javascript: void(0);" onclick="goView(${obj.id})">${obj.title}</a>
-                                </td>
-                                <td>${moment(obj.createdDate).format('YYYY-MM-DD HH:mm:ss')}</td>
-                                <td>${obj.views}</td>
-                            </tr>
-                        `;
-                    });
-                }
+                response.list.forEach((obj, idx) => {
+                    html += `
+                        <tr>
+                            <td>${num--}</td>
+                            <td class="text-left">
+                                <a href="javascript: void(0);" onclick="goView(${obj.id})">${obj.title}</a>
+                            </td>
+                            <td>${moment(obj.createdDate).format('YYYY-MM-DD HH:mm:ss')}</td>
+                            <td>${obj.views}</td>
+                        </tr>
+                    `;
+                });
 
                 document.getElementById('list').innerHTML = html;
+                drawPages(response.params);
             });
         }
 
+        /**
+         * 페이지 HTML 렌더링
+         */
+         function drawPages(params) {
+
+            if (!params) {
+                document.querySelector('.pagination').innerHTML = '';
+                return false;
+            }
+
+            let html = '';
+            const pagination = params.pagination;
+
+            // 첫 페이지, 이전 페이지
+            if (pagination.existPrevPage) {
+                html += `
+                    <li><a href="javascript:void(0)" onclick="findAll(1);" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                    <li><a href="javascript:void(0)" onclick="findAll(${pagination.startPage - 1});" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
+                `;
+            }
+
+            // 페이지 번호
+            for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+                const active = (i === params.page) ? 'class="active"' : '';
+                html += `<li ${active}><a href="javascript:void(0)" onclick="findAll(${i})">${i}</a></li>`;
+            }
+
+            // 다음 페이지, 마지막 페이지
+            if (pagination.existNextPage) {
+                html += `
+                    <li><a href="javascript:void(0)" onclick="findAll(${pagination.endPage + 1});" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
+                    <li><a href="javascript:void(0)" onclick="findAll(${pagination.totalPageCount});" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                `;
+            }
+
+            document.querySelector('.pagination').innerHTML = html;
+        }
         /**
          * 게시글 조회
          */

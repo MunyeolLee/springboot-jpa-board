@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -37,7 +37,7 @@ public class BoardApiController {
      * 게시글 전체 목록 조회 요청
      */
     @GetMapping
-    public List<BoardResponseDto> findAll(BoardCommonParams params) {
+    public Map<String, Object> findAll(BoardCommonParams params) {
         return boardService.findAll(params);
     }
 
