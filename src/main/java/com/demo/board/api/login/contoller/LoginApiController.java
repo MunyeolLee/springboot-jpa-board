@@ -3,8 +3,8 @@ package com.demo.board.api.login.contoller;
 import com.demo.board.api.login.dto.SignupRequestDto;
 import com.demo.board.domain.user.service.UserService;
 import com.demo.board.global.response.ResponseObject;
-import com.demo.board.global.response.StatusCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +24,7 @@ public class LoginApiController {
 
         return ResponseEntity.ok().body(
                 ResponseObject.builder()
-                        .status(StatusCode.OK.getStatus())
+                        .status(HttpStatus.OK.value())
                         .message("회원가입이 완료 되었습니다.")
                         .data("")
                         .build()
