@@ -1,13 +1,13 @@
 package com.demo.board.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 
 @Slf4j
@@ -34,6 +34,28 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(ErrorCode.METHOD_NOT_ALLOWED.getStatus())
                 .body(ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED));
+    }
+
+    /**
+     * 필수 값 예외 발생
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("MethodArgumentNotValidException", e);
+
+        String errorMessage = e.getBindingResult()
+                                .getAllErrors()
+                                .get(0)
+                                .getDefaultMessage();
+
+        return ResponseEntity
+                .status(ErrorCode.INVALID_PARAMETER.getStatus())
+                .body(ErrorResponse.builder()
+                        .status(ErrorCode.INVALID_PARAMETER.getStatus())
+                        .code(ErrorCode.INVALID_PARAMETER.name())
+                        .message(errorMessage)
+                        .timeStamp(LocalDateTime.now())
+                        .build());
     }
 
     /**
