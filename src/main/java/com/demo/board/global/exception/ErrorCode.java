@@ -29,16 +29,16 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "내부 서버 오류입니다."),
 
     /*
+     * 유효성 검사 오류
+     */
+    INVALID_PARAMETER(400, "요청 정보가 잘못 되었습니다."),
+
+    /*
      * 로그인, 회원가입
      */
     CAN_NOT_FOUND_USER(404, "회원정보를 찾을 수 없습니다."),
     CAN_NOT_SIGN_UP_USER( 400, "가입할 수 없는 회원입니다."),
-    ALREADY_REGISTERED_USER(400, "이미 가입된 회원 입니다."),
-
-    /*
-     * 요청 값 오류
-     */
-    INVALID_PARAMETER(403, "요청 값이 잘못 입력 되었습니다.")
+    ALREADY_REGISTERED_USER(400, "이미 가입된 회원 입니다.")
 
     ;
 
