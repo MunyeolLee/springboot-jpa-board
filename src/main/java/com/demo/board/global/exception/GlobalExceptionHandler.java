@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 필수 값 예외 발생
+     * 유효성 검사 예외 발생
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
