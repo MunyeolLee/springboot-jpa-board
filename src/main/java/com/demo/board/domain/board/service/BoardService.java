@@ -31,8 +31,8 @@ public class BoardService {
      * 게시글 저장
      */
     @Transactional
-    public Long save(BoardRequestDto params) {
-        Board board = boardRepository.save(params.toEntity());
+    public Long save(Board params) {
+        Board board = boardRepository.save(params);
         return board.getId();
     }
 
@@ -40,7 +40,7 @@ public class BoardService {
      * 게시글 수정
      */
     @Transactional
-    public Long updateById(Long id, BoardRequestDto params) {
+    public Long updateById(Long id, Board params) {
         Board board = boardRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
         board.update(params.getTitle(), params.getContent());
         return id;
