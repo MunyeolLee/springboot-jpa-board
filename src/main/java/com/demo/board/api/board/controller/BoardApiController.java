@@ -3,7 +3,7 @@ package com.demo.board.api.board.controller;
 import com.demo.board.api.board.dto.BoardCommonParams;
 import com.demo.board.api.board.dto.BoardRequestDto;
 import com.demo.board.api.board.dto.BoardResponseDto;
-import com.demo.board.domain.board.service.BoardService;
+import com.demo.board.api.board.service.BoardApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,14 +15,14 @@ import java.util.Map;
 @RequestMapping(value = "/boards")
 public class BoardApiController {
 
-    private final BoardService boardService;
+    private final BoardApiService boardApiService;
 
     /*
      * 게시글 저장 요청
      */
     @PostMapping
     public Long save(@Valid @RequestBody BoardRequestDto params) {
-        return boardService.save(params.toEntity());
+        return boardApiService.save(params);
     }
 
     /*
@@ -30,7 +30,7 @@ public class BoardApiController {
      */
     @PatchMapping("/{id}")
     public Long updateById(@PathVariable Long id, @RequestBody BoardRequestDto params) {
-        return boardService.updateById(id, params.toEntity());
+        return boardApiService.updateById(id, params);
     }
 
     /*
@@ -38,7 +38,7 @@ public class BoardApiController {
      */
     @GetMapping
     public Map<String, Object> findAll(BoardCommonParams params) {
-        return boardService.findAll(params);
+        return boardApiService.findAll(params);
     }
 
     /*
@@ -46,7 +46,7 @@ public class BoardApiController {
      */
     @GetMapping("/{id}")
     public BoardResponseDto findById(@PathVariable Long id) {
-        return boardService.findById(id);
+        return boardApiService.findById(id);
     }
 
     /*
@@ -54,6 +54,6 @@ public class BoardApiController {
      */
     @DeleteMapping("/{id}")
     public Long deleteById(@PathVariable Long id) {
-        return boardService.deleteById(id);
+        return boardApiService.deleteById(id);
     }
 }
