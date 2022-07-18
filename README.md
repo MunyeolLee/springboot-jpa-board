@@ -33,6 +33,10 @@ Spring, JPA 를 공부하기 위한 목적으로 만든 게시판
 - 게시글 삭제
 - 페이징
 
+## 변경사항 정리
+
+- [https://velog.io/@munyeol08/Spring-Boot-JPA-게시판-변경-사항-정리](https://velog.io/@munyeol08/Spring-Boot-JPA-%EA%B2%8C%EC%8B%9C%ED%8C%90-%EB%B3%80%EA%B2%BD-%EC%82%AC%ED%95%AD-%EC%A0%95%EB%A6%AC)
+
 ## TODO-LIST
 
 - 로그인 및 세션 관리
