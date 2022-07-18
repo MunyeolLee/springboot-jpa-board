@@ -22,7 +22,7 @@ public class BoardApiController {
      */
     @PostMapping
     public Long save(@Valid @RequestBody BoardRequestDto params) {
-        return boardService.save(params);
+        return boardService.save(params.toEntity());
     }
 
     /*
@@ -30,7 +30,7 @@ public class BoardApiController {
      */
     @PatchMapping("/{id}")
     public Long updateById(@PathVariable Long id, @RequestBody BoardRequestDto params) {
-        return boardService.updateById(id, params);
+        return boardService.updateById(id, params.toEntity());
     }
 
     /*
