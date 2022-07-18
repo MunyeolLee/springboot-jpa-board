@@ -1,5 +1,4 @@
 # Spring Boot - JPA 게시판
-Spring, JPA 를 공부하기 위한 목적으로 만든 게시판
 
 ## 사용기술 및 개발환경
 
