@@ -47,56 +47,34 @@ public class BoardService {
     }
 
     /*
-     * 전체 게시글 목록 조회
+     * Like 제목으로 게시글 조회
      */
-    public Map<String, Object> findAll(BoardCommonParams params) {
-        String searchType = params.getSearchType();
-        String keyword = params.getKeyword() == null ? "" : params.getKeyword();
+    public Page<Board> findByTitleContaining(String title, Pageable pageable) {
+        return boardRepository.findByTitleContaining(title, pageable);
+    }
 
-        // 데이터 정렬 설정
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate", "id");
-        // 페이징 처리 인터페이스
-        // params.getPage()-1 : 첫 페이지가 0 부터 인식되기 때문에 맞춰주기 위해서
-        Pageable pageable = PageRequest.of(params.getPage()-1, params.getRecordPerPage(), sort);
+    /*
+     * Like 내용으로 게시글 조회
+     */
+    public Page<Board> findByContentContaining(String content, Pageable pageable) {
+        return boardRepository.findByContentContaining(content, pageable);
+    }
 
-        // 검색 구분 분기
-        Page<Board> boardPage;
-        if( "title".equals(searchType) ) {
-            boardPage = boardRepository.findByTitleContaining(keyword, pageable);
-        }
-        else if( "content".equals(searchType) ) {
-            boardPage = boardRepository.findByContentContaining(keyword, pageable);
-        }
-        else {
-            boardPage = boardRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
-        }
-
-        // 전체 데이터 수
-        int totalRecordCount = Long.valueOf(boardPage.getTotalElements()).intValue();
-        // 전체 페이지 수
-        int totalPageCount = boardPage.getTotalPages();
-        // 화면에서 사용할 페이징 처리 정보 생성
-        Pagination pagination = new Pagination(totalRecordCount, totalPageCount, params);
-
-        params.setPagination(pagination);
-
-        // 게시글 리스트
-        List<BoardResponseDto> boardList = boardPage.getContent().stream().map(BoardResponseDto::new).collect(Collectors.toList());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("params", params);
-        response.put("list", boardList);
-        return response;
+    /*
+     * Like 제목 or 내용으로 게시글 조회
+     */
+    public Page<Board> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable) {
+        return boardRepository.findByTitleContainingOrContentContaining(title, content, pageable);
     }
 
     /*
      * 게시글 상세 조회
      */
     @Transactional
-    public BoardResponseDto findById(Long id) {
+    public Board findById(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
         board.increaseViews();
-        return new BoardResponseDto(board);
+        return board;
     }
 
     /*
