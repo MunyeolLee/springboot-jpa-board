@@ -3,7 +3,6 @@ Spring, JPA 를 공부하기 위한 목적으로 만든 게시판
 
 ## 사용기술 및 개발환경
 
----
 - Java 11
 - Spring Boot 2.7.1
 - Spring Data JPA
@@ -15,7 +14,6 @@ Spring, JPA 를 공부하기 위한 목적으로 만든 게시판
 
 ## 화면 캡처
 
----
 #### 게시글 목록 조회
 
 <img src="https://user-images.githubusercontent.com/108657231/179381880-be10f25b-83f8-49f9-8610-22f74d2047e4.png" width="700px" />
@@ -30,7 +28,6 @@ Spring, JPA 를 공부하기 위한 목적으로 만든 게시판
 
 ## 주요 기능
 
----
 - 게시글 작성
 - 게시글 수정
 - 게시글 삭제
@@ -38,7 +35,6 @@ Spring, JPA 를 공부하기 위한 목적으로 만든 게시판
 
 ## TODO-LIST
 
----
 - 로그인 및 세션 관리
 - 댓글, 대댓글
 - 공지글 등록
