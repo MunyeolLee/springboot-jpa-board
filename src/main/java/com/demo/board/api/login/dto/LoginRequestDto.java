@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 public class LoginRequestDto {
 
     @NotBlank(message = "아이디가 입력 되지 않았습니다.")
-    private String userId;
+    private String username;
 
     @NotBlank(message = "비밀번호가 입력 되지 않았습니다.")
     private String password;
