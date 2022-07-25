@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected  void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .authorizeRequests() // 인가 요청이 오면
-                .antMatchers("/auth/*", "/css/**/*","/fonts/**/*","/plugins/**/*","/scripts/**/*") // 해당 경로들은
+//                .antMatchers("/auth/*", "/css/**/*","/fonts/**/*","/plugins/**/*","/scripts/**/*") // 해당 경로들은
+                .antMatchers("/**/*") // 회원가입 기능 구현 전까지 패스..
                 .permitAll() // 접근을 허용한다.
                 .anyRequest() // 다른 모든 요청은
                 .authenticated() // 인증이 필요하다.
